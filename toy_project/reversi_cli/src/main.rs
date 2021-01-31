@@ -13,9 +13,7 @@ fn main() {
 
     loop{
         let ij:[usize;2] = user_input();
-        let i = ij[0];
-        let j = ij[1];
-        stone_state[i][j] = turn_state;
+        stone_state[ij[0]][ij[1]] = turn_state;
         print_board(&stone_state);
     }
 }
@@ -54,9 +52,8 @@ fn user_input() -> [usize;2]{
 
     let i: usize = match i.trim().parse() {
         Ok(i) => i,
-        Err(_) => 8,
+        Err(_) => 9,
     };
-    let i = (i - 1) as usize;
 
     let j = match j{
         "a" => 0 ,
@@ -69,6 +66,13 @@ fn user_input() -> [usize;2]{
         "h" => 7 ,
         _ => 8,
     };
+
+    if i == 9 || j == 8{
+         println!("please input 'low_case+number' ex) a2");
+         return user_input();
+    }
+    
+    let i = (i - 1) as usize;
 
     let ret: [usize;2] = [i,j];
     return ret;
