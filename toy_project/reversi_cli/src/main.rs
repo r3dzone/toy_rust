@@ -1,19 +1,42 @@
+use std::io;
+
 fn main() {
    let mut stone_state :[[i8;8];8] = [[3;8];8]; //white:0 black:1 none:3
-    
+
     //stone initialize;
     stone_state[3][3] = 0;
     stone_state[3][4] = 1;
     stone_state[4][3] = 1;
     stone_state[4][4] = 0;
 
-    for i in 0..8{
-        for j in 0..8{
-            print!("{} ",stone_state[i][j]);
-        }println!("");
-    }
     title();
-    print_board(&stone_state);
+
+    loop{
+         let mut loca = String::new();
+        println!("Please input the location you want to place: ");
+        io::stdin().read_line(&mut loca).expect("fail to read input");
+        let j = &loca[0..1];
+        let j = match j{
+            "a" => 0 ,
+            "b" => 1 ,
+            "c" => 2 ,
+            "d" => 3 ,
+            "e" => 4 ,
+            "f" => 5 ,
+            "g" => 6 ,
+            "h" => 7 ,
+            _ => continue,
+        };
+        let i = &loca[1..2];
+        let i: i8 = match i.trim().parse() {
+            Ok(i) => i,
+            Err(_) => continue,
+        };
+        let i = i -1;
+        println!("{}",i);
+        stone_state[i as usize][j] = 0;
+        print_board(&stone_state);
+    }
 }
 
 fn print_board(stone_state : &[[i8;8];8]){
