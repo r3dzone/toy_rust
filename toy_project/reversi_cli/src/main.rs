@@ -23,6 +23,33 @@ fn main() {
                     "white ●"
                 }
             );
+
+            let mut turnover = true;
+            let mut gameover = true;
+
+            for i in 0..8 {
+                for j in 0..8 {
+                    if chk_chacksu(0, turn_state, &[i, j]) {
+                        turnover = false;
+                    }
+                }
+            }
+
+            if turnover {
+                turn_state = (turn_state + 1) % 2;
+                for i in 0..8 {
+                    for j in 0..8 {
+                        if chk_chacksu(0, turn_state, &[i, j]) {
+                            gameover = false;
+                        }
+                    }
+                }
+                if gameover {
+                    break;
+                }
+                continue;
+            }
+
             let ij: [usize; 2] = user_input();
 
             turn_state = if chk_chacksu(0, turn_state, &ij) {
@@ -35,6 +62,7 @@ fn main() {
             };
         }
     }
+    println!("gameover!");
 }
 
 unsafe fn print_board() {
