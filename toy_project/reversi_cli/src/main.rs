@@ -1,6 +1,7 @@
 use std::io;
 
 static mut STONE_STATE: [[i8; 8]; 8] = [[3; 8]; 8]; //white:0 black:1 none:3
+static mut NEXT_STATE: [[i8; 8]; 8] = [[3; 8]; 8]; //white:0 black:1 none:3
 
 fn main() {
     unsafe {
@@ -14,22 +15,14 @@ fn main() {
         title();
 
         loop {
-            print_board();
-            println!(
-                "{} turn",
-                if turn_state == 1 {
-                    "black ○"
-                } else {
-                    "white ●"
-                }
-            );
-
             let mut turnover = true;
             let mut gameover = true;
+            NEXT_STATE = STONE_STATE;
 
             for i in 0..8 {
                 for j in 0..8 {
                     if chk_chacksu(0, turn_state, &[i, j]) {
+                        NEXT_STATE[i][j] = 4;
                         turnover = false;
                     }
                 }
@@ -49,6 +42,16 @@ fn main() {
                 }
                 continue;
             }
+
+            print_board();
+            println!(
+                "{} turn",
+                if turn_state == 1 {
+                    "black ○"
+                } else {
+                    "white ●"
+                }
+            );
 
             let ij: [usize; 2] = user_input();
 
@@ -76,10 +79,12 @@ unsafe fn print_board() {
     for i in 0..8 {
         print!(" {}\n{}", line, i + 1);
         for j in 0..8 {
-            let stone = if STONE_STATE[i][j] == 0 {
+            let stone = if NEXT_STATE[i][j] == 0 {
                 "●"
-            } else if STONE_STATE[i][j] == 1 {
+            } else if NEXT_STATE[i][j] == 1 {
                 "○"
+            } else if NEXT_STATE[i][j] == 4 {
+                "X"
             } else {
                 " "
             };
