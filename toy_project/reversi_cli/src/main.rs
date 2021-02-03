@@ -12,14 +12,22 @@ fn main() {
     title();
 
     loop{
-        let ij:[usize;2] = user_input();
-        stone_state[ij[0]][ij[1]] = turn_state;
         print_board(&stone_state);
+        println!("{} turn",if turn_state == 1 {"black"} else {"white"});
+        let ij:[usize;2] = user_input();
+        
+        turn_state = if chk_chacksu(&stone_state , &ij){
+            stone_state[ij[0]][ij[1]] = turn_state;
+            (turn_state + 1)%2
+        } else { 
+            println!("can't put stones this location");
+            turn_state 
+        };
     }
 }
 
 fn print_board(stone_state : &[[i8;8];8]){
-    //black = ● white = ○ ┼ ─ │
+    //black = ○ white = ●┼ ─ │
     let line = "┼───┼───┼───┼───┼───┼───┼───┼───┼";
     let col_idx = ['A','B','C','D','E','F','G','H'];
     for i in col_idx.iter(){
@@ -30,9 +38,9 @@ fn print_board(stone_state : &[[i8;8];8]){
         print!(" {}\n{}",line,i+1);
         for j in 0..8{
             let stone = if stone_state[i][j] == 0 {
-                "○"
-            }else if stone_state[i][j] == 1{
                 "●"
+            }else if stone_state[i][j] == 1{
+                "○"
             }else{
                 " "
             };
@@ -76,6 +84,14 @@ fn user_input() -> [usize;2]{
 
     let ret: [usize;2] = [i,j];
     return ret;
+}
+
+fn chk_chacksu(stone_state : &[[i8;8];8] , ij : &[usize;2]) -> bool{
+    if stone_state[ij[0]][ij[1]] != 3 {
+        return false;
+    }
+
+    return true;    
 }
 
 fn title(){
